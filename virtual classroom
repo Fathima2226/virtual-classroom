@@ -1,0 +1,122 @@
+class VirtualClassroom:
+    def __init__(self):
+        self.courses = {}
+        self.announcements = []
+        self.grades = {}
+
+    def add_course(self, course_name):
+        if course_name not in self.courses:
+            self.courses[course_name] = []
+            print(f"Course '{course_name}' has been added.")
+        else:
+            print("Course already exists.")
+
+    def post_announcement(self, announcement):
+        self.announcements.append(announcement)
+        print("Announcement posted.")
+
+    def assign_grade(self, student_name, course_name, grade):
+        if course_name not in self.courses:
+            print(f"Course '{course_name}' does not exist.")
+            return
+        if student_name not in self.courses[course_name]:
+            self.courses[course_name].append(student_name)
+        self.grades[(student_name, course_name)] = grade
+        print(f"Grade assigned to {student_name} for {course_name}: {grade}")
+
+    def view_courses(self):
+        if not self.courses:
+            print("No courses available.")
+        else:
+            print("Available Courses:")
+            for course in self.courses:
+                print(f"- {course}")
+
+    def view_announcements(self):
+        if not self.announcements:
+            print("No announcements available.")
+        else:
+            print("Announcements:")
+            for announcement in self.announcements:
+                print(f"- {announcement}")
+
+    def check_grades(self, student_name):
+        print(f"Grades for {student_name}:")
+        for (name, course), grade in self.grades.items():
+            if name == student_name:
+                print(f"{course}: {grade}")
+
+
+def instructor_menu(classroom):
+    while True:
+        print("\nInstructor Menu:")
+        print("1. Add Course")
+        print("2. Post Announcement")
+        print("3. Assign Grade")
+        print("4. View Courses")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            course_name = input("Enter course name: ")
+            classroom.add_course(course_name)
+        elif choice == "2":
+            announcement = input("Enter announcement: ")
+            classroom.post_announcement(announcement)
+        elif choice == "3":
+            student_name = input("Enter student name: ")
+            course_name = input("Enter course name: ")
+            grade = input("Enter grade: ")
+            classroom.assign_grade(student_name, course_name, grade)
+        elif choice == "4":
+            classroom.view_courses()
+        elif choice == "5":
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+
+def student_menu(classroom):
+    student_name = input("\nEnter your name: ")
+    while True:
+        print("\nStudent Menu:")
+        print("1. View Courses")
+        print("2. View Announcements")
+        print("3. Check Grades")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            classroom.view_courses()
+        elif choice == "2":
+            classroom.view_announcements()
+        elif choice == "3":
+            classroom.check_grades(student_name)
+        elif choice == "4":
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+
+def main():
+    classroom = VirtualClassroom()
+    while True:
+        print("\nVirtual Classroom")
+        print("1. Instructor Login")
+        print("2. Student Login")
+        print("3. Exit")
+        role = input("Enter your choice: ")
+
+        if role == "1":
+            instructor_menu(classroom)
+        elif role == "2":
+            student_menu(classroom)
+        elif role == "3":
+            print("Exiting the Virtual Classroom.")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+
+if __name__ == "__main__":
+    main()
